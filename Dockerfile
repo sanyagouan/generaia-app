@@ -31,10 +31,16 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Clerk secret key - available at runtime for middleware
+ENV CLERK_SECRET_KEY=***
+
 # Copy standalone output
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
 COPY --from=base /app/public ./public
+
+# Create .env file so Next.js standalone loads it
+RUN echo "CLERK_SECRET_KEY=$CLERK_SECRET_KEY" > /app/.env
 
 EXPOSE 3000
 
