@@ -6,8 +6,10 @@ WORKDIR /app
 RUN pnpm config set deploy-all-versions true 2>/dev/null; true
 
 # Dependencies
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --no-frozen-lockfile
+COPY package.json pnpm-lock.yaml .npmrc ./
+RUN pnpm config set minimum-release-age 0 && \
+    pnpm install --no-frozen-lockfile --ignore-scripts && \
+    pnpm rebuild esbuild sharp unrs-resolver
 
 # Build
 COPY . .
