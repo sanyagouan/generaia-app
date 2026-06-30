@@ -35,7 +35,7 @@ export default async function ConversacionesPage() {
     })
     .from(conversations)
     .leftJoin(tenants, eq(conversations.tenantId, tenants.id))
-    .orderBy(desc(sql`last_message_at`));
+    .orderBy(desc(conversations.updatedAt));
 
   return (
     <div className="p-8">
