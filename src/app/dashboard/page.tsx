@@ -2,7 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
 import { tenants, conversations, messages } from '@/db/schema';
-import { count, eq, and, gte, sql } from 'drizzle-orm';
+import { count, eq, gte, sql } from 'drizzle-orm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Users, MessageCircle, ArrowUpRight } from 'lucide-react';
 
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
     .from(tenants)
     .where(sql`${tenants.plan} IN ('active', 'trial')`);
 
-  let tenantName = null;
+  let tenantName: string | null = null;
   if (orgId) {
     const [tenant] = await db
       .select({ name: tenants.name })
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-zinc-100">Dashboard</h1>
         {tenantName && <p className="mt-1 text-sm text-zinc-400">{tenantName}</p>}
-        <p className="text-xs text-zinc-600">User: {userId}</p>
+        <p className="text-xs text-zinc-600">User: {userId} · Org: {orgId ?? 'N/A'}</p>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat) => {
