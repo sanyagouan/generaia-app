@@ -10,8 +10,12 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Add debug header to prove middleware runs
+  const res = NextResponse.next();
+  res.headers.set('x-middleware-ran', 'true');
+  
   if (isPublicRoute(req)) {
-    return;
+    return res;
   }
   
   const { userId, redirectToSignIn } = await auth();
@@ -20,7 +24,7 @@ export default clerkMiddleware(async (auth, req) => {
     return redirectToSignIn();
   }
   
-  return NextResponse.next();
+  return res;
 });
 
 export const config = {
