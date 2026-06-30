@@ -13,6 +13,15 @@ RUN pnpm config set minimum-release-age 0 && \
 
 # Build
 COPY . .
+
+# NEXT_PUBLIC_ vars must be present at BUILD time
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_Y2xlcmsuZ2VuZXJhaWEub3JnJA
+ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+ENV NEXT_PUBLIC_APP_URL=https://app.generaia.org
+
 RUN pnpm build
 
 # Production image
