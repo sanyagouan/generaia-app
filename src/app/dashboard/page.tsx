@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Users, MessageCircle, ArrowUpRight } from 'lucide-react';
 
 export default async function DashboardPage() {
+  // DEBUG: Print CLERK_SECRET_KEY to console
+  console.log("Server process.env.CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY ? process.env.CLERK_SECRET_KEY.substring(0, 10) + "..." : "undefined");
+
   const { userId, orgId } = await auth();
 
   if (!userId) {
