@@ -1,25 +1,30 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
-RUN corepack enable
 
-FROM base AS deps
+# Dependencies
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
+# Build
 COPY . .
 RUN pnpm build
 
-FROM base AS runner
-ENV NODE_ENV=production
+# Production image
+FROM node:22-alpine AS runner
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/next.config.ts ./
+ENV NODE_ENV=production
+
+# Copy standalone output
+COPY --from=base /app/.next/standalone ./
+COPY --from=base /app/.next/static ./.next/static
+COPY --from=base /app/public ./public
 
 EXPOSE 3000
-CMD ["pnpm", "start"]
+
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]
