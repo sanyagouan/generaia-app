@@ -28,6 +28,8 @@ ENV NODE_ENV=production
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
 COPY --from=base /app/public ./public
+COPY --from=base /app/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 EXPOSE 3000
 
