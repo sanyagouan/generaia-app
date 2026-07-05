@@ -11,13 +11,7 @@ RUN pnpm config set minimum-release-age 0 && \
 
 COPY . .
 
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_Y2xlcmsuZ2VuZXJhaWEub3JnJA
-ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
-ENV NEXT_PUBLIC_APP_URL=https://app.generaia.org
-
+# Build WITHOUT secret env vars (Clerk keys via Coolify runtime)
 RUN pnpm build
 
 FROM node:22-alpine AS runner
